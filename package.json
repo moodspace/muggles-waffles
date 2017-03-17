@@ -1,0 +1,24 @@
+{
+  "name": "muggles-waffles",
+  "version": "1.0.0",
+  "description": "CS 5150 Navigation in Library Stacks.",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.6.0",
+    "cors": "^2.8.1",
+    "js-yaml": "^3.8.2",
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.2",
+    "swagger-tools": "^0.10.1"
+  },
+  "devDependencies": {}
+}
