@@ -51,6 +51,7 @@ exports.booksIdGET = function(args, res, next) {
     }).then(function(book) {
         ret['application/json'] = {
             "id": book.get('id'),
+            "classnumber": book.get('classnumberId'),
             "ext_id": book.get('ext_id'),
             "stack": book.get('stackId')
         };
