@@ -3,11 +3,12 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var CallNumber = Model.CallNumber;
 var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
+
+DataSource.sync();
 
 exports.stacksGET = function(args, res, next) {
     /**

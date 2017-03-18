@@ -3,11 +3,13 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var CallNumber = Model.CallNumber;
+var ClassNumber = Model.ClassNumber;
 var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
+
+DataSource.sync();
 
 exports.booksGET = function(args, res, next) {
     /**
@@ -65,21 +67,42 @@ exports.booksPOST = function(args, res, next) {
      * returns String
      **/
     var callno = args.body.value.callno;
-    var re = /([A-z]{1,3})\s*(\d+(?:\.?\d+)*)\s*\.?([A-z]{1,3})\s*(\d+)\s+([^+\n]*)([+]*)/;
+    var re = /([A-z]{1,3})(\d+(?:\.[A-z]*\d+)*)\s*\.?([A-z])(\d+)\s+([^+]*)([+]*)/;
     var callno_dec = re.exec(callno);
-    Book.create({ext_id: args.body.value.ext_id, callno: callno, stackId: args.body.value.stack}).then(function(book) {
-        CallNumber.create({
-            field: callno_dec[1],
-            subfield: callno_dec[2],
-            third_line_alpha: callno_dec[3],
-            third_line_num: callno_dec[4],
-            extra: callno_dec[5],
-            oversize: callno_dec[6].length,
-            bookId: book.get('id')
+    var newBook = Book.create({ext_id: args.body.value.ext_id, callno: callno, stackId: args.body.value.stack}).then(function(book) {
+        // add existing call number class / create new class
+        var cid = -1;
+        var classno = {
+            class: callno_dec[1].charAt(0),
+            subclass: callno_dec[1],
+            subclass2: callno_dec[2].split('.')[0],
+            subclass3: callno_dec[2].split('.')[1],
+            subclass4: callno_dec[2].split('.')[2],
+            oversize: callno_dec[6].length
+        };
+        ClassNumber.find({where: classno}).then(function(c) {
+            if (!c) {
+                ClassNumber.create(classno).then(function(c) {
+                    updateBookClassNumber(book.id, c.id);
+                });
+            } else {
+                updateBookClassNumber(book.id, c.id);
+            }
         });
+
     }, function(reason) {
         res.end(reason ? reason.message : "Error");
     });
 
     res.end();
 };
+
+function updateBookClassNumber(bid, cid) {
+    Book.update({
+        classnumberId: cid
+    }, {
+        where: {
+            id: bid
+        }
+    });
+}

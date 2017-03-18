@@ -3,11 +3,12 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var CallNumber = Model.CallNumber;
 var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
+
+DataSource.sync();
 
 exports.searchGET = function(args, res, next) {
     /**
@@ -18,20 +19,16 @@ exports.searchGET = function(args, res, next) {
    **/
     var ret = {};
 
-    var callno = args.callno.value;
-    var re = /([A-z]{1,3})\s*(\d+(?:\.?\d+)*)\s*\.?([A-z]{1,3})\s*(\d+)\s+([^+\n]*)([+]*)/;
-    var callno_dec = re.exec(callno);
-    CallNumber.findAll({
+    Book.find({
         where: {
-            $and: {
-                field: callno_dec[1],
-                subfield: callno_dec[2],
-                third_line_alpha: callno_dec[3],
-                third_line_num: callno_dec[4]
-            }
+            callno: args.callno.value
         }
-    }).then(function(books) {
-        ret['application/json'] = books.map((d) => ({"result_type": "Book", "result_id": d.id, "result": d.callno}));
+    }).then(function(book) {
+        ret['application/json'] = {
+            "result_type": "Book",
+            "result_id": book.id,
+            "result": book.callno
+        };
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     });

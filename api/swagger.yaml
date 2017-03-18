@@ -300,35 +300,61 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Search"
+  /classnumbers/{id}/stack:
+    put:
+      tags:
+      - "ClassNumbers"
+      - "Stacks"
+      description: "Assign a class number a stack"
+      operationId: "classnumbersIdStackPUT"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of class number"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "stack_id"
+        in: "query"
+        description: "Stack to add to the class number"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "ClassNumbers"
 definitions:
-  CallNumber:
+  ClassNumber:
     type: "object"
     properties:
       id:
         type: "integer"
         format: "int32"
-        description: "Unique ID representing a call number"
-      field:
+        description: "Unique ID representing a class number"
+      class:
         type: "string"
-        description: "Field of call number"
-      subfield:
-        type: "number"
-        format: "double"
-        description: "Subfield of call number"
-      third_line_alpha:
+        description: "Class of LCC"
+      subclass:
         type: "string"
-        description: "Third line (alphabetical) of call number"
-      third_line_num:
-        type: "number"
-        format: "double"
-        description: "Third line (numerical) of call number"
-      extra:
+        description: "Subclass of LCC"
+      subclass2:
         type: "string"
-        description: "Remaining part of call number"
-      book_id:
+        description: "More subclass of LCC"
+      subclass3:
+        type: "string"
+        description: "More subclass of LCC"
+      subclass4:
+        type: "string"
+        description: "More subclass of LCC"
+      oversize:
         type: "integer"
         format: "int32"
-        description: "Corresponding book ID"
+        description: "Size property"
   Book:
     type: "object"
     properties:
@@ -343,6 +369,10 @@ definitions:
       callno:
         type: "string"
         description: "Call number representing a book"
+      classnumber:
+        type: "integer"
+        format: "int32"
+        description: "Class number representing a book"
       stack:
         type: "integer"
         format: "int32"

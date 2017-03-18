@@ -23,15 +23,14 @@
 'use strict';
 
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize('library_nav', 'root', 'password');
-
-var CallNumber = sequelize.define('callnumber', {
-    // e.g. 'PR6051.D162 H6'
-    field: Sequelize.STRING, // 'PR'
-    subfield: Sequelize.DOUBLE, // '6051'
-    third_line_alpha: Sequelize.STRING, // 'D'
-    third_line_num: Sequelize.DOUBLE, // '162'
-    extra: Sequelize.STRING, // 'H6'
+var sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {host: process.env.DB_HOST});
+var ClassNumber = sequelize.define('classnumber', {
+    // e.g. 'QA76.73.P98 B439 2013'
+    class: Sequelize.CHAR(1), // 'Q'
+    subclass: Sequelize.STRING, // 'QA'
+    subclass2: Sequelize.STRING, // '76'
+    subclass3: Sequelize.STRING, // '73'
+    subclass4: Sequelize.STRING, // 'P98'
     oversize: Sequelize.BOOLEAN // TINYINT, '0' '1', '2'
 });
 
@@ -62,13 +61,14 @@ var Library = sequelize.define('library', {
     longitude: Sequelize.DOUBLE
 });
 
-Book.hasOne(CallNumber);
+ClassNumber.hasMany(Book);
+ClassNumber.belongsTo(Stack);
 Stack.hasMany(Book);
 Floor.hasMany(Stack);
 Library.hasMany(Floor);
 
 exports.DataSource = sequelize;
-exports.CallNumber = CallNumber;
+exports.ClassNumber = ClassNumber;
 exports.Book = Book;
 exports.Stack = Stack;
 exports.Floor = Floor;
