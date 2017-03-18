@@ -305,9 +305,14 @@ paths:
       description: "Search a book by its call number."
       operationId: "searchGET"
       parameters:
-      - name: "callno"
+      - name: "keyword"
         in: "query"
         description: "Call number of search"
+        required: true
+        type: "string"
+      - name: "type"
+        in: "query"
+        description: "Type of search (Book|Class)"
         required: true
         type: "string"
       responses:

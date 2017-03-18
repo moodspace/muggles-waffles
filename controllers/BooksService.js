@@ -70,7 +70,7 @@ exports.booksPOST = function(args, res, next) {
      * returns String
      **/
     var callno = args.body.value.callno;
-    var re = /([A-z]{1,3})(\d+(?:\.[A-z]*\d+)*)\s*\.?([A-z])(\d+)\s+([^+]*)([+]*)/;
+    var re = /([A-z]{1,3})(\d+(?:\.[A-z]*\d+)*)\s+\.?([A-z])(\d+)\s+([^+]*)([+]*)/;
     var callno_dec = re.exec(callno);
     var newBook = Book.create({ext_id: args.body.value.ext_id, callno: callno, stackId: args.body.value.stack}).then(function(book) {
         // add existing call number class / create new class
