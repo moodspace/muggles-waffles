@@ -3,8 +3,6 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var ClassNumber = Model.ClassNumber;
-var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
@@ -21,73 +19,76 @@ exports.searchGET = function(args, res, next) {
    * returns List
    **/
     var ret = {};
+    var re = /([A-z]{1,3})(\d+(?:\.[A-z]*\d+)*)\s+\.?([A-z])(\d+)\s+([^+]*)([+]*)/;
+    var callno_dec = re.exec(args.keyword.value);
+    var oversize = callno_dec[6].length;
 
-    if (args.type.value.toLowerCase() === "class" || args.type.value.toLowerCase() === "classnumber") {
-        var re = /([A-z\?]{1,3})([A-z0-9\?]+(?:\.[A-z0-9\?]+)*)\s+([^+]*)([+]*)/;
-        var callno_dec = re.exec(args.keyword.value);
-
-        var class_char = callno_dec[1].charAt(0);
-        if (class_char === "?") {
-            class_char = '_';
-        }
-        var subclasses = callno_dec[1].split('.');
-        subclasses = subclasses.map(function(subclass) {
-            return subclass.replace('\?', '_').replace('\*+', '%');
-        });
-        var oversize = callno_dec[4].length;
-
-        classSearch(res, class_char, subclasses, oversize);
-        return;
-    }
-    Book.find({
-        where: {
-            callno: args.keyword.value
-        }
-    }).then(function(book) {
-        ret['application/json'] = {
-            "result_type": "Book",
-            "result_id": book.id,
-            "result": book.callno
-        };
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
-    });
+    classSearch(res, callno_dec[1], callno_dec[2].split('.')[0], oversize);
 };
 
-function classSearch(res, class_char, subclasses, oversize) {
+function classSearch(res, class_code, subclass, oversize) {
     var ret = {};
 
-    ClassNumber.findAll({
+    Stack.findAll({
         where: {
-            class: {
-                $like : class_char
-            },
-            subclass: {
-                $like: subclasses[0] ? subclasses[0] : '%'
-            },
-            subclass2: {
-                $like: subclasses[1] ? subclasses[1] : '%'
-            },
-            subclass3: {
-                $like: subclasses[2] ? subclasses[2] : '%'
-            },
-            subclass4: {
-                $like: subclasses[3] ? subclasses[3] : '%'
-            },
-            oversize: oversize
+            $and: [
+
+                {
+                    $or: [
+                        {
+                            startClass: {
+                                $lt: class_code
+                            }
+                        }, {
+                            $and: [
+                                {
+                                    startClass: {
+                                        $eq: class_code
+                                    }
+                                }, {
+                                    startSubclass: {
+                                        $lte: subclass
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    $or: [
+                        {
+                            endClass: {
+                                $gt: class_code
+                            }
+                        }, {
+                            $and: [
+                                {
+                                    endClass: {
+                                        $eq: class_code
+                                    }
+                                }, {
+                                    endSubclass: {
+                                        $gte: subclass
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    oversize: oversize
+                }
+            ]
         }
-    }).then(function(classnumbers) {
-        ret['application/json'] = classnumbers.map(function(classno) {
+    }).then(function(stacks) {
+        ret['application/json'] = stacks.map(function(stack) {
             return {
-                "result_type": "Class",
-                "result_id": classno.id,
+                "result_type": "Stack",
+                "result_id": stack.id,
                 "result": [
-                    classno.class,
-                    classno.subclass,
-                    classno.subclass2,
-                    classno.subclass3,
-                    classno.subclass4,
-                    classno.oversize
+                    stack.startClass,
+                    stack.startSubclass,
+                    stack.endClass,
+                    stack.endSubclass,
+                    stack.oversize
                 ].join(', ')
             };
         });

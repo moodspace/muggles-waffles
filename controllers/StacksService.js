@@ -3,7 +3,6 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
@@ -34,7 +33,12 @@ exports.stacksGET = function(args, res, next) {
             "ly": d.get('ly'),
             "rotation": d.get('rotation'),
             "geojson": d.get('geojson'),
-            "floor": d.get('floorId')
+            "floor": d.get('floorId'),
+            "oversize": d.get('oversize'),
+            "startClass": d.get('startClass'),
+            "startSubclass": d.get('startSubclass'),
+            "endClass": d.get('endClass'),
+            "endSubclass": d.get('endSubclass')
         }));
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
@@ -50,7 +54,6 @@ exports.stacksIdGET = function(args, res, next) {
    * id Integer ID of stack
    * returns Stack
    **/
-    console.log(args)
     var ret = {};
 
     Stack.find({
@@ -66,7 +69,12 @@ exports.stacksIdGET = function(args, res, next) {
             "ly": stack.get('ly'),
             "rotation": stack.get('rotation'),
             "geojson": stack.get('geojson'),
-            "floor": stack.get('floorId')
+            "floor": stack.get('floorId'),
+            "oversize": stack.get('oversize'),
+            "startClass": stack.get('startClass'),
+            "startSubclass": stack.get('startSubclass'),
+            "endClass": stack.get('endClass'),
+            "endSubclass": stack.get('endSubclass')
         };
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
@@ -89,7 +97,12 @@ exports.stacksPOST = function(args, res, next) {
         ly: args.body.value.ly,
         rotation: args.body.value.rotation,
         geojson: args.body.value.geojson,
-        floorId: args.body.value.floor
+        floorId: args.body.value.floor,
+        oversize: args.body.value.oversize,
+        startClass: args.body.value.startClass,
+        startSubclass: args.body.value.startSubclass,
+        endClass: args.body.value.endClass,
+        endSubclass: args.body.value.endSubclass
     });
     res.end();
 };

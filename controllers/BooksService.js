@@ -3,8 +3,6 @@
 var Model = require('../models/default.js');
 
 var DataSource = Model.DataSource;
-var ClassNumber = Model.ClassNumber;
-var Book = Model.Book;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;

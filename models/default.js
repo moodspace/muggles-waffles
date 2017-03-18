@@ -24,20 +24,6 @@
 
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {host: process.env.DB_HOST});
-var ClassNumber = sequelize.define('classnumber', {
-    // e.g. 'QA76.73.P98 B439 2013'
-    class: Sequelize.CHAR(1), // 'Q'
-    subclass: Sequelize.STRING, // 'QA'
-    subclass2: Sequelize.STRING, // '76'
-    subclass3: Sequelize.STRING, // '73'
-    subclass4: Sequelize.STRING, // 'P98'
-    oversize: Sequelize.BOOLEAN // TINYINT, '0' '1', '2'
-});
-
-var Book = sequelize.define('book', {
-    ext_id: Sequelize.INTEGER,
-    callno: Sequelize.STRING
-});
 
 var Stack = sequelize.define('stack', {
     cx: Sequelize.DOUBLE, // rect center (anchor) x
@@ -45,7 +31,12 @@ var Stack = sequelize.define('stack', {
     lx: Sequelize.DOUBLE, // rect size x
     ly: Sequelize.DOUBLE, // rect size y
     rotation: Sequelize.DOUBLE, // rect rotation
-    geojson: Sequelize.TEXT('medium') // fine shape
+    geojson: Sequelize.TEXT('medium'), // fine shape
+    oversize: Sequelize.BOOLEAN, // TINYINT, '0' '1', '2'
+    startClass: Sequelize.STRING, // start class number 'QA'
+    startSubclass: Sequelize.INTEGER, // start class number '67'
+    endClass: Sequelize.STRING, // end class number 'QB',
+    endSubclass: Sequelize.INTEGER // end class number '72'
 });
 
 var Floor = sequelize.define('floor', {
@@ -61,15 +52,10 @@ var Library = sequelize.define('library', {
     longitude: Sequelize.DOUBLE
 });
 
-ClassNumber.hasMany(Book);
-ClassNumber.belongsTo(Stack);
-Stack.hasMany(Book);
 Floor.hasMany(Stack);
 Library.hasMany(Floor);
 
 exports.DataSource = sequelize;
-exports.ClassNumber = ClassNumber;
-exports.Book = Book;
 exports.Stack = Stack;
 exports.Floor = Floor;
 exports.Library = Library;
