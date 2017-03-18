@@ -101,6 +101,28 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Books"
+  /books/{id}/stack:
+    get:
+      tags:
+      - "Books"
+      - "Stacks"
+      description: "Get stack info based on book."
+      operationId: "booksIdStackGET"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of book"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Stack"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Books"
   /stacks:
     get:
       tags:
@@ -301,11 +323,32 @@ paths:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Search"
   /classnumbers/{id}/stack:
+    get:
+      tags:
+      - "ClassNumbers"
+      - "Stacks"
+      description: "Get stack info based on class number."
+      operationId: "classnumbersIdStackGET"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of class number"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Stack"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "ClassNumbers"
     put:
       tags:
       - "ClassNumbers"
       - "Stacks"
-      description: "Assign a class number a stack"
+      description: "Assign a class number a stack."
       operationId: "classnumbersIdStackPUT"
       parameters:
       - name: "id"

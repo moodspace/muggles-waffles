@@ -11,6 +11,9 @@ var Library = Model.Library;
 
 DataSource.sync();
 
+var Stacks = require('./StacksService');
+var Errors = require('./Errors');
+
 exports.booksGET = function(args, res, next) {
     /**
      * Returns information about books at a given stack.
@@ -29,7 +32,7 @@ exports.booksGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 
@@ -41,8 +44,7 @@ exports.booksIdGET = function(args, res, next) {
      * returns Book
      **/
     var ret = {};
-
-    Book.findAll({
+    Book.find({
         where: {
             id: args.id.value
         }
@@ -55,7 +57,7 @@ exports.booksIdGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 
@@ -91,10 +93,33 @@ exports.booksPOST = function(args, res, next) {
         });
 
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 
     res.end();
+};
+
+exports.booksIdStackGET = function(args, res, next) {
+    /**
+   * Get stack info based on book.
+   *
+   * id Integer ID of book
+   * returns Stack
+   **/
+    var ret = {};
+    Book.find({
+        where: {
+            id: args.id.value
+        }
+    }).then(function(book) {
+        Stacks.stacksIdGET({
+            id: {
+                value: book.get("stackId")
+            }
+        }, res, next);
+    }, function(reason) {
+        Errors.emitDbError(res, reason);
+    });
 };
 
 function updateBookClassNumber(bid, cid) {

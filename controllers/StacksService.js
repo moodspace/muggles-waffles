@@ -10,6 +10,8 @@ var Library = Model.Library;
 
 DataSource.sync();
 
+var Errors = require('./Errors');
+
 exports.stacksGET = function(args, res, next) {
     /**
    * Returns information about stacks at a given floor.
@@ -37,7 +39,7 @@ exports.stacksGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 
@@ -48,6 +50,7 @@ exports.stacksIdGET = function(args, res, next) {
    * id Integer ID of stack
    * returns Stack
    **/
+    console.log(args)
     var ret = {};
 
     Stack.find({
@@ -68,7 +71,7 @@ exports.stacksIdGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 

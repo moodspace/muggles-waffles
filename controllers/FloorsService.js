@@ -10,6 +10,8 @@ var Library = Model.Library;
 
 DataSource.sync();
 
+var Errors = require('./Errors');
+
 exports.floorsGET = function(args, res, next) {
     /**
    * Returns information about floors at a given library.
@@ -35,7 +37,7 @@ exports.floorsGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 
@@ -64,7 +66,7 @@ exports.floorsIdGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 

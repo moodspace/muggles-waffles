@@ -15,3 +15,7 @@ module.exports.booksIdGET = function booksIdGET(req, res, next) {
 module.exports.booksPOST = function booksPOST(req, res, next) {
     Books.booksPOST(req.swagger.params, res, next);
 };
+
+module.exports.booksIdStackGET = function booksIdStackGET(req, res, next) {
+    Books.booksIdStackGET(req.swagger.params, res, next);
+};

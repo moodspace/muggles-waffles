@@ -10,6 +10,8 @@ var Library = Model.Library;
 
 DataSource.sync();
 
+var Errors = require('./Errors');
+
 exports.librariesGET = function(args, res, next) {
     /**
    * Returns information about libraries.
@@ -23,7 +25,7 @@ exports.librariesGET = function(args, res, next) {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
     }, function(reason) {
-        res.end(reason ? reason.message : "Error");
+        Errors.emitDbError(res, reason);
     });
 };
 

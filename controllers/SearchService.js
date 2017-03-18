@@ -10,6 +10,8 @@ var Library = Model.Library;
 
 DataSource.sync();
 
+var Errors = require('./Errors');
+
 exports.searchGET = function(args, res, next) {
     /**
    * Returns information about objects of a given keyword. The response includes the display text of and reference to each object, and lists the objects in the proper display order.
