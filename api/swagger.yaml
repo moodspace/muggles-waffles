@@ -61,7 +61,7 @@ paths:
     post:
       tags:
       - "Stacks"
-      description: "Adds a new stack to the list"
+      description: "Adds a new stack to a given floor."
       operationId: "stacksPOST"
       parameters:
       - in: "body"
@@ -82,7 +82,7 @@ paths:
     get:
       tags:
       - "Stacks"
-      description: "Returns information about the stack of the specified ID."
+      description: "Returns information about the stack of a specified ID."
       operationId: "stacksIdGET"
       parameters:
       - name: "id"
@@ -129,7 +129,7 @@ paths:
     post:
       tags:
       - "Floors"
-      description: "Adds a new floor to the list"
+      description: "Adds a new floor to a given library."
       operationId: "floorsPOST"
       parameters:
       - in: "body"
@@ -150,7 +150,7 @@ paths:
     get:
       tags:
       - "Floors"
-      description: "Returns information about the floor of the specified ID."
+      description: "Returns information about the floor of a specified ID."
       operationId: "floorsIdGET"
       parameters:
       - name: "id"
@@ -191,7 +191,7 @@ paths:
     post:
       tags:
       - "Libraries"
-      description: "Adds a new library to the list."
+      description: "Adds a new library."
       operationId: "librariesPOST"
       parameters:
       - in: "body"
@@ -212,7 +212,7 @@ paths:
     get:
       tags:
       - "Search"
-      description: "Search a stack by a call number."
+      description: "Find stacks by a call number."
       operationId: "searchGET"
       parameters:
       - name: "keyword"
