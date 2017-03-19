@@ -391,7 +391,7 @@ paths:
             type: "string"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "Rule"
+      x-swagger-router-controller: "Rules"
   /rules/{id}:
     delete:
       tags:

@@ -6,6 +6,7 @@ var DataSource = Model.DataSource;
 var Stack = Model.Stack;
 var Floor = Model.Floor;
 var Library = Model.Library;
+var Rule = Model.Rule;
 
 DataSource.sync();
 
@@ -22,8 +23,25 @@ exports.searchGET = function(args, res, next) {
     var re = /([A-z]{1,3})(\d+(?:\.[A-z]*\d+)*)\s+\.?([A-z])(\d+)\s+([^+]*)([+]*)/;
     var callno_dec = re.exec(args.keyword.value);
     var oversize = callno_dec[6].length;
-
-    classSearch(res, callno_dec[1], callno_dec[2].split('.')[0], oversize);
+    Rule.findAll({
+        where: {
+            callNumber: callno_dec[0]
+        }
+    }).then(function(rules) {
+        if (rules.length > 0) {
+            ret['application/json'] = rules.map(function(rule) {
+                return {
+                    "result_type": rule.type,
+                    "result_id": rule.id,
+                    "result": [rule.callNumber, rule.rule].join(', ')
+                };
+            });
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(ret[Object.keys(ret)[0]] || {}, null, 2));
+        } else {
+            classSearch(res, callno_dec[1], callno_dec[2].split('.')[0], oversize);
+        }
+    });
 };
 
 function classSearch(res, class_code, subclass, oversize) {
@@ -83,13 +101,7 @@ function classSearch(res, class_code, subclass, oversize) {
             return {
                 "result_type": "Stack",
                 "result_id": stack.id,
-                "result": [
-                    stack.startClass,
-                    stack.startSubclass,
-                    stack.endClass,
-                    stack.endSubclass,
-                    stack.oversize
-                ].join(', ')
+                "result": [stack.startClass, stack.startSubclass, stack.endClass, stack.endSubclass, stack.oversize].join(', ')
             };
         });
         res.setHeader('Content-Type', 'application/json');

@@ -47,14 +47,11 @@ exports.floorsIdDELETE = function(args, res, next) {
    * id Integer ID of floor
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Floor.destroy({
+        where: {
+            id: args.id.value
+        }
+    });
 };
 
 exports.floorsIdGET = function(args, res, next) {
@@ -104,12 +101,16 @@ exports.floorsPUT = function(args, res, next) {
    * body Floor Floor with given ID to be updated
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Floor.update({
+        name: args.body.value.name,
+        size_x: args.body.value.size_x,
+        size_y: args.body.value.size_y,
+        geojson: args.body.value.geojson,
+        libraryId: args.body.value.library
+    }, {
+        where: {
+            id: args.body.value.id
+        }
+    });
+    res.end();
 };

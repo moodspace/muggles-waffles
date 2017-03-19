@@ -35,14 +35,11 @@ exports.librariesIdDELETE = function(args, res, next) {
    * id Integer ID of library
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Library.destroy({
+        where: {
+            id: args.id.value
+        }
+    });
 };
 
 exports.librariesPOST = function(args, res, next) {
@@ -63,12 +60,14 @@ exports.librariesPUT = function(args, res, next) {
    * body Library Library with given ID to be updated
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Library.update({
+        name: args.body.value.name,
+        latitude: args.body.value.latitude,
+        longitude: args.body.value.longitude
+    }, {
+        where: {
+            id: args.body.value.id
+        }
+    });
+    res.end();
 };

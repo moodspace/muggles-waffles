@@ -54,14 +54,11 @@ exports.stacksIdDELETE = function(args, res, next) {
    * id Integer ID of stack
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Stack.destroy({
+        where: {
+            id: args.id.value
+        }
+    });
 };
 
 exports.stacksIdGET = function(args, res, next) {
@@ -131,12 +128,23 @@ exports.stacksPUT = function(args, res, next) {
    * body Stack Stack with given ID to be updated
    * returns String
    **/
-    var examples = {};
-    examples['application/json'] = "aeiou";
-    if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-        res.end();
-    }
+    Stack.update({
+        cx: args.body.value.cx,
+        cy: args.body.value.cy,
+        lx: args.body.value.lx,
+        ly: args.body.value.ly,
+        rotation: args.body.value.rotation,
+        geojson: args.body.value.geojson,
+        floorId: args.body.value.floor,
+        oversize: args.body.value.oversize,
+        startClass: args.body.value.startClass,
+        startSubclass: args.body.value.startSubclass,
+        endClass: args.body.value.endClass,
+        endSubclass: args.body.value.endSubclass
+    }, {
+        where: {
+            id: args.body.value.id
+        }
+    });
+    res.end();
 };
