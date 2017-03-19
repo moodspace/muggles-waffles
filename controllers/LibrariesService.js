@@ -28,6 +28,23 @@ exports.librariesGET = function(args, res, next) {
     });
 };
 
+exports.librariesIdDELETE = function(args, res, next) {
+    /**
+   * Delete a library.
+   *
+   * id Integer ID of library
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
+};
+
 exports.librariesPOST = function(args, res, next) {
     /**
    * Adds a new library to the list.
@@ -37,4 +54,21 @@ exports.librariesPOST = function(args, res, next) {
    **/
     Library.create({name: args.body.value.name, latitude: args.body.value.latitude, longitude: args.body.value.longitude});
     res.end();
+};
+
+exports.librariesPUT = function(args, res, next) {
+    /**
+   * Edit a library.
+   *
+   * body Library Library with given ID to be updated
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
 };

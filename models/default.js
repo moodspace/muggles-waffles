@@ -52,6 +52,12 @@ var Library = sequelize.define('library', {
     longitude: Sequelize.DOUBLE
 });
 
+var Rule = sequelize.define('rule', {
+    callNumber: Sequelize.STRING,
+    rule: Sequelize.STRING,
+    type: Sequelize.STRING
+});
+
 Floor.hasMany(Stack);
 Library.hasMany(Floor);
 
@@ -59,3 +65,4 @@ exports.DataSource = sequelize;
 exports.Stack = Stack;
 exports.Floor = Floor;
 exports.Library = Library;
+exports.Rule = Rule;

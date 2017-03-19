@@ -66,7 +66,27 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Stack with default ID to be added to the list"
+        description: "Stack with default ID to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Stack"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Stacks"
+    put:
+      tags:
+      - "Stacks"
+      description: "Edit a stack."
+      operationId: "stacksPUT"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Stack with given ID to be updated"
         required: true
         schema:
           $ref: "#/definitions/Stack"
@@ -101,6 +121,26 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Stacks"
+    delete:
+      tags:
+      - "Stacks"
+      description: "Delete a stack."
+      operationId: "stacksIdDELETE"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of stack"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Stacks"
   /floors:
     get:
       tags:
@@ -134,7 +174,27 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Floor with default ID to be added to the list"
+        description: "Floor with default ID to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Floor"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Floors"
+    put:
+      tags:
+      - "Floors"
+      description: "Edit a floor."
+      operationId: "floorsPUT"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Floor with given ID to be updated"
         required: true
         schema:
           $ref: "#/definitions/Floor"
@@ -169,6 +229,26 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Floors"
+    delete:
+      tags:
+      - "Floors"
+      description: "Delete a floor."
+      operationId: "floorsIdDELETE"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of floor"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Floors"
   /libraries:
     get:
       tags:
@@ -196,10 +276,51 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Library with default ID to be added to the list"
+        description: "Library with default ID to be added"
         required: true
         schema:
           $ref: "#/definitions/Library"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Libraries"
+    put:
+      tags:
+      - "Libraries"
+      description: "Edit a library."
+      operationId: "librariesPUT"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Library with given ID to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Library"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Libraries"
+  /libraries/{id}:
+    delete:
+      tags:
+      - "Libraries"
+      description: "Delete a library."
+      operationId: "librariesIdDELETE"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of library"
+        required: true
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "OK"
@@ -232,6 +353,66 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Search"
+  /rules:
+    get:
+      tags:
+      - "Rules"
+      description: "Returns information about rules."
+      operationId: "rulesGET"
+      parameters: []
+      responses:
+        200:
+          description: "An array of rules"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Rule"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Rules"
+    post:
+      tags:
+      - "Rules"
+      description: "Adds a new rule."
+      operationId: "rulesPOST"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Rule with default ID to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Rule"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Rule"
+  /rules/{id}:
+    delete:
+      tags:
+      - "Rules"
+      description: "Delete a rule."
+      operationId: "rulesIdDELETE"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of rule"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Rules"
 definitions:
   Stack:
     type: "object"
@@ -341,6 +522,22 @@ definitions:
       result:
         type: "string"
         description: "Displayed text of result"
+  Rule:
+    type: "object"
+    properties:
+      rule_type:
+        type: "string"
+        description: "Type of rule"
+      rule_id:
+        type: "integer"
+        format: "int32"
+        description: "ID of rule"
+      call_number:
+        type: "string"
+        description: "Call number applying the rule"
+      rule:
+        type: "string"
+        description: "Rule to interpret"
   Error:
     type: "object"
     properties:

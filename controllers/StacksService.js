@@ -47,6 +47,23 @@ exports.stacksGET = function(args, res, next) {
     });
 };
 
+exports.stacksIdDELETE = function(args, res, next) {
+    /**
+   * Delete a stack.
+   *
+   * id Integer ID of stack
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
+};
+
 exports.stacksIdGET = function(args, res, next) {
     /**
    * Returns information about the stack of the specified ID.
@@ -105,4 +122,21 @@ exports.stacksPOST = function(args, res, next) {
         endSubclass: args.body.value.endSubclass
     });
     res.end();
+};
+
+exports.stacksPUT = function(args, res, next) {
+    /**
+   * Edit a stack.
+   *
+   * body Stack Stack with given ID to be updated
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
 };

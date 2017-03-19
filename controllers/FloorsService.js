@@ -40,6 +40,23 @@ exports.floorsGET = function(args, res, next) {
     });
 };
 
+exports.floorsIdDELETE = function(args, res, next) {
+    /**
+   * Delete a floor.
+   *
+   * id Integer ID of floor
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
+};
+
 exports.floorsIdGET = function(args, res, next) {
     /**
    * Returns information about the floor of the specified ID.
@@ -78,4 +95,21 @@ exports.floorsPOST = function(args, res, next) {
    **/
     Floor.create({name: args.body.value.name, size_x: args.body.value.size_x, size_y: args.body.value.size_y, geojson: args.body.value.geojson, libraryId: args.body.value.library});
     res.end();
+};
+
+exports.floorsPUT = function(args, res, next) {
+    /**
+   * Edit a floor.
+   *
+   * body Floor Floor with given ID to be updated
+   * returns String
+   **/
+    var examples = {};
+    examples['application/json'] = "aeiou";
+    if (Object.keys(examples).length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+        res.end();
+    }
 };
